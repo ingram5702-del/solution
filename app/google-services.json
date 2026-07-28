@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "509613779969",
+    "firebase_url": "https://solution-a1c55-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "solution-a1c55",
+    "storage_bucket": "solution-a1c55.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509613779969:android:a665e9835ae572401ba400",
+        "android_client_info": {
+          "package_name": "com.solutionwin.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY1b2d1zO_IHXuxCVXETTqmsFcFNS6Ixw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

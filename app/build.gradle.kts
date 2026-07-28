@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.sporthub.app"
+    namespace = "com.solutionwin.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.sporthub.app"
+        applicationId = "com.solutionwin.app"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
