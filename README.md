@@ -20,7 +20,7 @@ Package name: `com.solutionwin.app`.
 
 ## Сборка
 
-Требуются Android SDK 35 и Java 17.
+Требуются Android SDK 36 и Java 17.
 
 ```bash
 ./gradlew assembleDebug

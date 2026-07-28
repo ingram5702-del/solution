@@ -2,7 +2,6 @@ package com.solutionwin.app
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
 import android.content.ClipData
@@ -32,12 +31,14 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.FileProvider
 import java.io.File
 import java.util.UUID
 
 @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-class WebViewActivity : Activity() {
+class WebViewActivity : ComponentActivity() {
     private lateinit var webView: WebView
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private var cameraImageUri: Uri? = null
@@ -66,6 +67,20 @@ class WebViewActivity : Activity() {
             )
         }
         setContentView(webView)
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (webView.canGoBack()) {
+                        webView.goBack()
+                        webView.postDelayed(::saveCurrentPage, SAVE_AFTER_BACK_DELAY_MS)
+                    } else {
+                        isEnabled = false
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                }
+            },
+        )
         configureWebView()
         webView.loadUrl(url)
     }
@@ -102,15 +117,6 @@ class WebViewActivity : Activity() {
             }
         }
         super.onDestroy()
-    }
-
-    override fun onBackPressed() {
-        if (::webView.isInitialized && webView.canGoBack()) {
-            webView.goBack()
-            webView.postDelayed(::saveCurrentPage, SAVE_AFTER_BACK_DELAY_MS)
-        } else {
-            super.onBackPressed()
-        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -346,7 +352,7 @@ class WebViewActivity : Activity() {
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>,
+        permissions: Array<String>,
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

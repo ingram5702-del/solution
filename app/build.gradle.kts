@@ -14,12 +14,12 @@ val releaseKeyPassword = providers.environmentVariable("SIGNING_KEY_PASSWORD")
 
 android {
     namespace = "com.solutionwin.app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.solutionwin.app"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
