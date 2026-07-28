@@ -475,7 +475,7 @@ class WebViewActivity : Activity() {
     companion object {
         const val EXTRA_URL = "extra_url"
         private const val CLIPBOARD_BRIDGE_NAME = "SolutionWinClipboard"
-        private const val CLIPBOARD_LABEL = "SportHub"
+        private const val CLIPBOARD_LABEL = "Winner SportHub"
         private const val SAVE_AFTER_BACK_DELAY_MS = 250L
         private const val REQUEST_FILE_CHOOSER = 2401
         private const val REQUEST_WEB_PERMISSIONS = 2402

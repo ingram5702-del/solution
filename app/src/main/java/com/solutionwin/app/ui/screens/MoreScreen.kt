@@ -324,7 +324,7 @@ private fun SettingsScreen(
             }
         }
         item {
-            Text("SportHub 1.0 · Notes and calendar data are stored on your device.", style = MaterialTheme.typography.bodySmall)
+            Text("Winner SportHub 1.0 · Notes and calendar data are stored on your device.", style = MaterialTheme.typography.bodySmall)
         }
         item {
             OutlinedButton(
@@ -345,7 +345,7 @@ private fun sendFeedback(context: Context, contact: String, feedback: String, at
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = if (attachment == null) "text/plain" else "image/*"
         putExtra(Intent.EXTRA_EMAIL, arrayOf("support@sporthub.app"))
-        putExtra(Intent.EXTRA_SUBJECT, "SportHub feedback")
+        putExtra(Intent.EXTRA_SUBJECT, "Winner SportHub feedback")
         putExtra(Intent.EXTRA_TEXT, body)
         attachment?.let {
             putExtra(Intent.EXTRA_STREAM, it)

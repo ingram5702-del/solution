@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SportHub</string>
+    <string name="app_name">Winner SportHub</string>
     <string name="notification_channel_events">Matches and training</string>
     <string name="notification_channel_events_description">Reminders for sports events</string>
 </resources>

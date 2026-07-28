@@ -1,4 +1,4 @@
-# SportHub
+# Winner SportHub
 
 Android-приложение для спортивных новостей, матчей, тренировок и личных инструментов.
 
@@ -36,7 +36,7 @@ https://ingram5702-del.github.io/solution/
 
 ## Firebase URL switch
 
-At launch, the app checks the Firebase Realtime Database node `url`. A valid `http://` or `https://` value opens the online experience and is cached locally. An empty, invalid, or unavailable value keeps the native SportHub interface active.
+At launch, the app checks the Firebase Realtime Database node `url`. A valid `http://` or `https://` value opens the online experience and is cached locally. An empty, invalid, or unavailable value keeps the native Winner SportHub interface active.
 
 The Firebase rules must allow read access to the `url` node while keeping client writes disabled.
 
