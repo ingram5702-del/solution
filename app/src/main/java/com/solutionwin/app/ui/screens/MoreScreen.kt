@@ -45,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -244,6 +245,7 @@ private fun SettingsScreen(
     onDynamicColorChanged: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     var feedback by rememberSaveable { mutableStateOf("") }
     var contact by rememberSaveable { mutableStateOf("") }
     var attachment by remember { mutableStateOf<Uri?>(null) }
@@ -323,6 +325,14 @@ private fun SettingsScreen(
         }
         item {
             Text("SportHub 1.0 · Данные заметок и календаря хранятся на устройстве.", style = MaterialTheme.typography.bodySmall)
+        }
+        item {
+            OutlinedButton(
+                onClick = { uriHandler.openUri("https://ingram5702-del.github.io/solution/") },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("Privacy Policy")
+            }
         }
     }
 }

@@ -2,6 +2,8 @@
 
 Android-приложение для спортивных новостей, матчей, тренировок и личных инструментов.
 
+Package name: `com.solutionwin.app`.
+
 ## Что уже работает
 
 - демонстрационная спортивная лента с переходом на официальные источники;
@@ -25,3 +27,27 @@ Android-приложение для спортивных новостей, ма�
 ```
 
 APK появится в `app/build/outputs/apk/debug/app-debug.apk`.
+
+## Privacy Policy
+
+The published Privacy Policy is available at:
+
+https://ingram5702-del.github.io/solution/
+
+## Firebase URL switch
+
+At launch, the app checks the Firebase Realtime Database node `url`. A valid `http://` or `https://` value opens the online experience and is cached locally. An empty, invalid, or unavailable value keeps the native SportHub interface active.
+
+The Firebase rules must allow read access to the `url` node while keeping client writes disabled.
+
+## Google Play workflow
+
+The manual `Publish to Google Play` GitHub Actions workflow builds a signed release AAB and can upload it to the internal, alpha, beta, or production track. It defaults to the internal track with draft status.
+
+Required repository secrets:
+
+- `PLAY_SERVICE_ACCOUNT_JSON`
+- `ANDROID_SIGNING_KEY_BASE64`
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`

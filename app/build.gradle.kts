@@ -4,7 +4,13 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services)
 }
+
+val releaseStoreFile = providers.environmentVariable("SIGNING_STORE_FILE")
+val releaseStorePassword = providers.environmentVariable("SIGNING_STORE_PASSWORD")
+val releaseKeyAlias = providers.environmentVariable("SIGNING_KEY_ALIAS")
+val releaseKeyPassword = providers.environmentVariable("SIGNING_KEY_PASSWORD")
 
 android {
     namespace = "com.solutionwin.app"
@@ -20,8 +26,25 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+    signingConfigs {
+        if (
+            releaseStoreFile.isPresent &&
+            releaseStorePassword.isPresent &&
+            releaseKeyAlias.isPresent &&
+            releaseKeyPassword.isPresent
+        ) {
+            create("release") {
+                storeFile = file(releaseStoreFile.get())
+                storePassword = releaseStorePassword.get()
+                keyAlias = releaseKeyAlias.get()
+                keyPassword = releaseKeyPassword.get()
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfigs.findByName("release")?.let { signingConfig = it }
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -61,6 +84,8 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.play.services.code.scanner)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.database)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,5 +1,6 @@
 package com.solutionwin.app
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,9 +16,16 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+    private var openedWebView = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WebUrlStore.getCachedUrl(this)?.let { cachedUrl ->
+            openWebView(cachedUrl)
+            return
+        }
+
         enableEdgeToEdge()
         setContent {
             val settings by viewModel.settings.collectAsStateWithLifecycle()
@@ -29,5 +37,17 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+
+        FirebaseWebUrlChecker.checkUrl { url ->
+            WebUrlStore.saveUrl(this, url)
+            openWebView(url)
+        }
+    }
+
+    private fun openWebView(url: String) {
+        if (openedWebView || isFinishing || isDestroyed) return
+        openedWebView = true
+        startActivity(Intent(this, WebViewActivity::class.java).putExtra(WebViewActivity.EXTRA_URL, url))
+        finish()
     }
 }
