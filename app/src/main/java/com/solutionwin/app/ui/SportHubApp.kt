@@ -25,11 +25,11 @@ import com.solutionwin.app.ui.screens.NotesScreen
 import com.solutionwin.app.ui.screens.TacticsScreen
 
 private enum class MainTab(val title: String, val symbol: String) {
-    HOME("Главная", "●"),
-    CALENDAR("Календарь", "▦"),
-    NOTES("Заметки", "✎"),
-    TACTICS("Тактика", "◇"),
-    MORE("Ещё", "＋"),
+    HOME("Home", "●"),
+    CALENDAR("Calendar", "▦"),
+    NOTES("Notes", "✎"),
+    TACTICS("Tactics", "◇"),
+    MORE("More", "＋"),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +50,7 @@ fun SportHubApp(
                 navigationIcon = {
                     if (moreDestination != null) {
                         androidx.compose.material3.TextButton(onClick = { moreDestination = null }) {
-                            Text("Назад")
+                            Text("Back")
                         }
                     }
                 },

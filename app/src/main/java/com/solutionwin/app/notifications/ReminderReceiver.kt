@@ -30,7 +30,7 @@ class ReminderReceiver : BroadcastReceiver() {
         )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher)
-            .setContentTitle(if (isTraining) "Скоро тренировка" else "Скоро матч")
+            .setContentTitle(if (isTraining) "Training starts soon" else "Match starts soon")
             .setContentText(title)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(openApp)

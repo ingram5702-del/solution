@@ -59,9 +59,9 @@ import kotlinx.coroutines.delay
 private data class MoreItem(val route: String, val title: String, val description: String, val symbol: String)
 
 private val moreItems = listOf(
-    MoreItem("Секундомер", "Секундомер", "Круги, пауза и точный замер времени", "◷"),
-    MoreItem("QR-сканер", "QR-сканер", "Найти официальную ссылку на матч", "▣"),
-    MoreItem("Настройки", "Настройки", "Тема, уведомления и обратная связь", "⚙"),
+    MoreItem("Stopwatch", "Stopwatch", "Laps, pause, and precise time tracking", "◷"),
+    MoreItem("QR Scanner", "QR Scanner", "Find an official match link", "▣"),
+    MoreItem("Settings", "Settings", "Theme, notifications, and feedback", "⚙"),
 )
 
 @Composable
@@ -73,14 +73,14 @@ fun MoreScreen(
     onDynamicColorChanged: (Boolean) -> Unit,
 ) {
     when (destination) {
-        "Секундомер" -> StopwatchScreen()
-        "QR-сканер" -> QrScannerScreen()
-        "Настройки" -> SettingsScreen(settings, onThemeChanged, onDynamicColorChanged)
+        "Stopwatch" -> StopwatchScreen()
+        "QR Scanner" -> QrScannerScreen()
+        "Settings" -> SettingsScreen(settings, onThemeChanged, onDynamicColorChanged)
         else -> LazyColumn(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            item { Text("Спортивные инструменты", style = MaterialTheme.typography.titleLarge) }
+            item { Text("Sports tools", style = MaterialTheme.typography.titleLarge) }
             items(moreItems.size) { index ->
                 val item = moreItems[index]
                 Card(
@@ -105,7 +105,7 @@ fun MoreScreen(
 
 @Composable
 private fun StopwatchScreen() {
-    var mode by rememberSaveable { mutableStateOf("Бег") }
+    var mode by rememberSaveable { mutableStateOf("Running") }
     var running by rememberSaveable { mutableStateOf(false) }
     var baseElapsed by rememberSaveable { mutableLongStateOf(0L) }
     var startMarker by rememberSaveable { mutableLongStateOf(0L) }
@@ -126,7 +126,7 @@ private fun StopwatchScreen() {
     ) {
         Spacer(Modifier.height(24.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            listOf("Бег", "Матч", "Свободный").forEach { option ->
+            listOf("Running", "Match", "Free").forEach { option ->
                 FilterChip(
                     selected = mode == option,
                     onClick = { mode = option },
@@ -134,8 +134,8 @@ private fun StopwatchScreen() {
                 )
             }
         }
-        Text("Режим: $mode", color = MaterialTheme.colorScheme.primary)
-        Text("Точное время", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("Mode: $mode", color = MaterialTheme.colorScheme.primary)
+        Text("Precise time", color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(formatStopwatch(displayed), style = MaterialTheme.typography.displayMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Button(onClick = {
@@ -147,18 +147,18 @@ private fun StopwatchScreen() {
                     startMarker = SystemClock.elapsedRealtime()
                     running = true
                 }
-            }) { Text(if (running) "Пауза" else "Старт") }
-            OutlinedButton(onClick = { if (displayed > 0) laps.add(0, displayed) }) { Text("Круг") }
+            }) { Text(if (running) "Pause" else "Start") }
+            OutlinedButton(onClick = { if (displayed > 0) laps.add(0, displayed) }) { Text("Lap") }
             OutlinedButton(onClick = {
                 running = false; baseElapsed = 0; displayed = 0; startMarker = 0; laps.clear()
-            }) { Text("Сброс") }
+            }) { Text("Reset") }
         }
         if (laps.isNotEmpty()) {
             HorizontalDivider()
             LazyColumn(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 itemsIndexed(laps) { index, lap ->
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Круг ${laps.size - index}")
+                        Text("Lap ${laps.size - index}")
                         Text(formatStopwatch(lap))
                     }
                 }
@@ -172,7 +172,7 @@ internal fun formatStopwatch(milliseconds: Long): String {
     val minutes = totalSeconds / 60
     val seconds = totalSeconds % 60
     val hundredths = milliseconds % 1_000 / 10
-    return String.format(Locale.getDefault(), "%02d:%02d.%02d", minutes, seconds, hundredths)
+    return String.format(Locale.ENGLISH, "%02d:%02d.%02d", minutes, seconds, hundredths)
 }
 
 @Composable
@@ -199,40 +199,40 @@ private fun QrScannerScreen() {
     ) {
         Spacer(Modifier.height(24.dp))
         Text("▣", style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.primary)
-        Text("Сканер QR-кода", style = MaterialTheme.typography.headlineSmall)
+        Text("QR Code Scanner", style = MaterialTheme.typography.headlineSmall)
         Text(
-            "Наведите камеру на QR-код. Ссылка откроется только после вашего подтверждения.",
+            "Point the camera at a QR code. A link will open only after you confirm it.",
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Button(onClick = {
             error = null
             scanner.startScan()
-                .addOnSuccessListener { barcode -> result = barcode.rawValue ?: "Пустой QR-код" }
-                .addOnFailureListener { error = "Не удалось отсканировать код" }
-        }) { Text("Сканировать") }
+                .addOnSuccessListener { barcode -> result = barcode.rawValue ?: "Empty QR code" }
+                .addOnFailureListener { error = "Could not scan the code" }
+        }) { Text("Scan") }
         result?.let { value ->
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Результат", style = MaterialTheme.typography.labelLarge)
+                    Text("Result", style = MaterialTheme.typography.labelLarge)
                     Text(value)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         if (isWebLink) {
                             Button(onClick = {
                                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(value)))
-                            }) { Text("Открыть ссылку") }
+                            }) { Text("Open link") }
                         }
                         OutlinedButton(onClick = {
                             val clipboard = context.getSystemService(ClipboardManager::class.java)
                             clipboard.setPrimaryClip(ClipData.newPlainText("QR", value))
-                            Toast.makeText(context, "Скопировано", Toast.LENGTH_SHORT).show()
-                        }) { Text("Копировать") }
+                            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
+                        }) { Text("Copy") }
                     }
                 }
             }
         }
         error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
         Text(
-            "Проверяйте адрес сайта и используйте только официальные трансляции.",
+            "Check the website address and use official broadcasts only.",
             style = MaterialTheme.typography.bodySmall,
         )
     }
@@ -258,15 +258,15 @@ private fun SettingsScreen(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        item { Text("Оформление", style = MaterialTheme.typography.titleLarge) }
+        item { Text("Appearance", style = MaterialTheme.typography.titleLarge) }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(8.dp)) {
                     ThemeMode.entries.forEach { mode ->
                         val label = when (mode) {
-                            ThemeMode.SYSTEM -> "Как в системе"
-                            ThemeMode.LIGHT -> "Светлая"
-                            ThemeMode.DARK -> "Тёмная"
+                            ThemeMode.SYSTEM -> "Use system setting"
+                            ThemeMode.LIGHT -> "Light"
+                            ThemeMode.DARK -> "Dark"
                         }
                         Row(
                             Modifier.fillMaxWidth().selectable(
@@ -286,45 +286,45 @@ private fun SettingsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Column(Modifier.weight(1f)) {
-                            Text("Динамические цвета")
-                            Text("Цвета обоев на Android 12+", style = MaterialTheme.typography.bodySmall)
+                            Text("Dynamic colors")
+                            Text("Wallpaper colors on Android 12+", style = MaterialTheme.typography.bodySmall)
                         }
                         Switch(settings.dynamicColor, onCheckedChange = onDynamicColorChanged)
                     }
                 }
             }
         }
-        item { Text("Обратная связь", style = MaterialTheme.typography.titleLarge) }
+        item { Text("Feedback", style = MaterialTheme.typography.titleLarge) }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedTextField(
                         value = contact,
                         onValueChange = { contact = it },
-                        label = { Text("Ваш email (необязательно)") },
+                        label = { Text("Your email (optional)") },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                     )
                     OutlinedTextField(
                         value = feedback,
                         onValueChange = { feedback = it },
-                        label = { Text("Сообщение") },
+                        label = { Text("Message") },
                         modifier = Modifier.fillMaxWidth(),
                         minLines = 4,
                     )
                     OutlinedButton(onClick = { attachmentPicker.launch("image/*") }) {
-                        Text(if (attachment == null) "Добавить скриншот" else "Скриншот прикреплён")
+                        Text(if (attachment == null) "Add screenshot" else "Screenshot attached")
                     }
                     Button(
                         enabled = feedback.isNotBlank(),
                         onClick = { sendFeedback(context, contact, feedback, attachment) },
                         modifier = Modifier.fillMaxWidth(),
-                    ) { Text("Отправить") }
+                    ) { Text("Send") }
                 }
             }
         }
         item {
-            Text("SportHub 1.0 · Данные заметок и календаря хранятся на устройстве.", style = MaterialTheme.typography.bodySmall)
+            Text("SportHub 1.0 · Notes and calendar data are stored on your device.", style = MaterialTheme.typography.bodySmall)
         }
         item {
             OutlinedButton(
@@ -340,19 +340,19 @@ private fun SettingsScreen(
 private fun sendFeedback(context: Context, contact: String, feedback: String, attachment: Uri?) {
     val body = buildString {
         append(feedback.trim())
-        if (contact.isNotBlank()) append("\n\nКонтакт: ${contact.trim()}")
+        if (contact.isNotBlank()) append("\n\nContact: ${contact.trim()}")
     }
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = if (attachment == null) "text/plain" else "image/*"
         putExtra(Intent.EXTRA_EMAIL, arrayOf("support@sporthub.app"))
-        putExtra(Intent.EXTRA_SUBJECT, "Обратная связь SportHub")
+        putExtra(Intent.EXTRA_SUBJECT, "SportHub feedback")
         putExtra(Intent.EXTRA_TEXT, body)
         attachment?.let {
             putExtra(Intent.EXTRA_STREAM, it)
-            clipData = ClipData.newRawUri("Скриншот", it)
+            clipData = ClipData.newRawUri("Screenshot", it)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
     }
-    runCatching { context.startActivity(Intent.createChooser(intent, "Отправить обратную связь")) }
-        .onFailure { Toast.makeText(context, "Не найдено приложение для отправки", Toast.LENGTH_SHORT).show() }
+    runCatching { context.startActivity(Intent.createChooser(intent, "Send feedback")) }
+        .onFailure { Toast.makeText(context, "No compatible app found", Toast.LENGTH_SHORT).show() }
 }

@@ -29,21 +29,21 @@ private data class NewsArticle(
 
 private val demoNews = listOf(
     NewsArticle(
-        "Футбол",
-        "Клубы готовятся к новому игровому туру",
-        "Расписание, последние тренировки и ключевые игроки предстоящих встреч.",
+        "Football",
+        "Clubs prepare for the next round of matches",
+        "Schedules, recent training sessions, and key players to watch in the upcoming fixtures.",
         "https://www.uefa.com/",
     ),
     NewsArticle(
-        "Баскетбол",
-        "Команды усиливают защиту перед решающими матчами",
-        "Тренеры рассказали о подготовке и обновлённых игровых сочетаниях.",
+        "Basketball",
+        "Teams strengthen their defense ahead of decisive games",
+        "Coaches shared details about their preparation and updated lineups.",
         "https://www.fiba.basketball/",
     ),
     NewsArticle(
-        "Теннис",
-        "Спортсмены вышли на финальный этап подготовки",
-        "В центре внимания — физическая форма, подача и восстановление.",
+        "Tennis",
+        "Players enter the final stage of preparation",
+        "Fitness, serving, and recovery are the main areas of focus.",
         "https://www.itftennis.com/",
     ),
 )
@@ -60,10 +60,10 @@ fun HomeScreen() {
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             ) {
                 Column(Modifier.padding(20.dp)) {
-                    Text("Всё для спорта — в одном месте", style = MaterialTheme.typography.headlineSmall)
+                    Text("Everything for sports in one place", style = MaterialTheme.typography.headlineSmall)
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        "Новости, матчи, тренировки, таймеры и тактическая доска.",
+                        "News, matches, training sessions, timers, and a tactics board.",
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
@@ -71,15 +71,15 @@ fun HomeScreen() {
         }
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AssistChip(onClick = {}, label = { Text("Футбол") })
-                AssistChip(onClick = {}, label = { Text("Баскетбол") })
-                AssistChip(onClick = {}, label = { Text("Теннис") })
+                AssistChip(onClick = {}, label = { Text("Football") })
+                AssistChip(onClick = {}, label = { Text("Basketball") })
+                AssistChip(onClick = {}, label = { Text("Tennis") })
             }
         }
         item {
-            Text("Последние новости", style = MaterialTheme.typography.titleLarge)
+            Text("Latest news", style = MaterialTheme.typography.titleLarge)
             Text(
-                "Демонстрационная лента — источник API подключается отдельно.",
+                "Demo news feed — a live API source can be connected separately.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -93,7 +93,7 @@ fun HomeScreen() {
                     Text(article.category, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Text(article.title, style = MaterialTheme.typography.titleMedium)
                     Text(article.summary, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text("Открыть официальный источник", style = MaterialTheme.typography.labelMedium)
+                    Text("Open official source", style = MaterialTheme.typography.labelMedium)
                 }
             }
         }

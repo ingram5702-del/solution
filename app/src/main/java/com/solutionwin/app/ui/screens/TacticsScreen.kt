@@ -68,7 +68,7 @@ fun TacticsScreen() {
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item {
-            Text("Выберите расстановку", style = MaterialTheme.typography.titleMedium)
+            Text("Choose a formation", style = MaterialTheme.typography.titleMedium)
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(formations, key = Formation::name) { formation ->
                     FilterChip(
@@ -82,7 +82,7 @@ fun TacticsScreen() {
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Схема ${selected.name}", style = MaterialTheme.typography.titleLarge)
+                    Text("Formation ${selected.name}", style = MaterialTheme.typography.titleLarge)
                     Canvas(Modifier.fillMaxWidth().height(520.dp)) {
                         drawRoundRect(fieldColor, cornerRadius = androidx.compose.ui.geometry.CornerRadius(28f, 28f))
                         val inset = 20f
@@ -121,7 +121,7 @@ fun TacticsScreen() {
         }
         item {
             Text(
-                "Номера показывают стартовые позиции. Редактор перемещений игроков и экспорт изображения можно добавить следующим обновлением.",
+                "Numbers show the starting positions. Player movement editing and image export can be added in a future update.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

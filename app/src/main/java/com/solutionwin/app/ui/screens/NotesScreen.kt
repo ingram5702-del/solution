@@ -35,6 +35,7 @@ import com.solutionwin.app.domain.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.DateFormat
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -62,9 +63,9 @@ fun NotesScreen(viewModel: NotesViewModel = viewModel()) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                Text("Заметок пока нет", style = MaterialTheme.typography.titleLarge)
-                Text("Сохраняйте планы тренировок, результаты и идеи.")
-                Button(onClick = { showEditor = true }) { Text("Создать заметку") }
+                Text("No notes yet", style = MaterialTheme.typography.titleLarge)
+                Text("Save training plans, results, and ideas.")
+                Button(onClick = { showEditor = true }) { Text("Create note") }
             }
         } else {
             LazyColumn(
@@ -78,11 +79,15 @@ fun NotesScreen(viewModel: NotesViewModel = viewModel()) {
                             if (note.body.isNotBlank()) Text(note.body)
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                                 Text(
-                                    DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date(note.createdAt)),
+                                    DateFormat.getDateTimeInstance(
+                                        DateFormat.SHORT,
+                                        DateFormat.SHORT,
+                                        Locale.ENGLISH,
+                                    ).format(Date(note.createdAt)),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
-                                TextButton(onClick = { viewModel.delete(note) }) { Text("Удалить") }
+                                TextButton(onClick = { viewModel.delete(note) }) { Text("Delete") }
                             }
                         }
                     }
@@ -109,16 +114,16 @@ private fun NoteEditorDialog(onDismiss: () -> Unit, onSave: (String, String) -> 
     var body by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Новая заметка") },
+        title = { Text("New note") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                OutlinedTextField(title, { title = it }, label = { Text("Название") }, singleLine = true)
-                OutlinedTextField(body, { body = it }, label = { Text("Текст") }, minLines = 3)
+                OutlinedTextField(title, { title = it }, label = { Text("Title") }, singleLine = true)
+                OutlinedTextField(body, { body = it }, label = { Text("Note") }, minLines = 3)
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSave(title.ifBlank { "Без названия" }, body) }) { Text("Сохранить") }
+            TextButton(onClick = { onSave(title.ifBlank { "Untitled" }, body) }) { Text("Save") }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Отмена") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
     )
 }

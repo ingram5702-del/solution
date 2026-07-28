@@ -50,6 +50,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.DateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -89,9 +90,9 @@ fun CalendarScreen(viewModel: CalendarViewModel = viewModel()) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                Text("Календарь свободен", style = MaterialTheme.typography.titleLarge)
-                Text("Добавьте матч или тренировку и выберите время напоминания.")
-                Button(onClick = { showEditor = true }) { Text("Добавить событие") }
+                Text("Your calendar is clear", style = MaterialTheme.typography.titleLarge)
+                Text("Add a match or training session and choose a reminder time.")
+                Button(onClick = { showEditor = true }) { Text("Add event") }
             }
         } else {
             LazyColumn(
@@ -102,15 +103,21 @@ fun CalendarScreen(viewModel: CalendarViewModel = viewModel()) {
                     Card(Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                             Text(
-                                if (event.type == SportEventType.MATCH) "МАТЧ" else "ТРЕНИРОВКА",
+                                if (event.type == SportEventType.MATCH) "MATCH" else "TRAINING",
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.primary,
                             )
                             Text(event.title, style = MaterialTheme.typography.titleMedium)
-                            Text(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(event.startAt)))
+                            Text(
+                                DateFormat.getDateTimeInstance(
+                                    DateFormat.MEDIUM,
+                                    DateFormat.SHORT,
+                                    Locale.ENGLISH,
+                                ).format(Date(event.startAt)),
+                            )
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Text("Напомнить за ${event.reminderMinutes} мин", style = MaterialTheme.typography.bodySmall)
-                                TextButton(onClick = { viewModel.delete(event) }) { Text("Удалить") }
+                                Text("Remind ${event.reminderMinutes} min before", style = MaterialTheme.typography.bodySmall)
+                                TextButton(onClick = { viewModel.delete(event) }) { Text("Delete") }
                             }
                         }
                     }
@@ -132,7 +139,7 @@ fun CalendarScreen(viewModel: CalendarViewModel = viewModel()) {
                 ) {
                     notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
-                viewModel.add(title.ifBlank { if (type == SportEventType.MATCH) "Матч" else "Тренировка" }, type, startAt, reminder)
+                viewModel.add(title.ifBlank { if (type == SportEventType.MATCH) "Match" else "Training" }, type, startAt, reminder)
                 showEditor = false
             },
         )
@@ -150,7 +157,11 @@ private fun EventEditorDialog(
     var type by remember { mutableStateOf(SportEventType.MATCH) }
     var startAt by remember { mutableLongStateOf(initial.timeInMillis) }
     var reminder by remember { mutableIntStateOf(30) }
-    val formatted = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(startAt))
+    val formatted = DateFormat.getDateTimeInstance(
+        DateFormat.MEDIUM,
+        DateFormat.SHORT,
+        Locale.ENGLISH,
+    ).format(Date(startAt))
 
     fun pickDateTime() {
         val current = Calendar.getInstance().apply { timeInMillis = startAt }
@@ -174,24 +185,24 @@ private fun EventEditorDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Новое событие") },
+        title = { Text("New event") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(title, { title = it }, label = { Text("Название") }, singleLine = true)
+                OutlinedTextField(title, { title = it }, label = { Text("Title") }, singleLine = true)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(type == SportEventType.MATCH, { type = SportEventType.MATCH }, label = { Text("Матч") })
-                    FilterChip(type == SportEventType.TRAINING, { type = SportEventType.TRAINING }, label = { Text("Тренировка") })
+                    FilterChip(type == SportEventType.MATCH, { type = SportEventType.MATCH }, label = { Text("Match") })
+                    FilterChip(type == SportEventType.TRAINING, { type = SportEventType.TRAINING }, label = { Text("Training") })
                 }
                 Button(onClick = ::pickDateTime, modifier = Modifier.fillMaxWidth()) { Text(formatted) }
-                Text("Напомнить заранее", style = MaterialTheme.typography.labelLarge)
+                Text("Remind me before", style = MaterialTheme.typography.labelLarge)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(15, 30, 60).forEach { minutes ->
-                        FilterChip(reminder == minutes, { reminder = minutes }, label = { Text("$minutes мин") })
+                        FilterChip(reminder == minutes, { reminder = minutes }, label = { Text("$minutes min") })
                     }
                 }
             }
         },
-        confirmButton = { TextButton(onClick = { onSave(title, type, startAt, reminder) }) { Text("Сохранить") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Отмена") } },
+        confirmButton = { TextButton(onClick = { onSave(title, type, startAt, reminder) }) { Text("Save") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
     )
 }
