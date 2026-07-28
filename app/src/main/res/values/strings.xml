@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SportHub</string>
+    <string name="notification_channel_events">Матчи и тренировки</string>
+    <string name="notification_channel_events_description">Напоминания о спортивных событиях</string>
+</resources>
